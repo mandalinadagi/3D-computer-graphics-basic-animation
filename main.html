@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+attribute vec4 vColor ;
+attribute vec2 vTexCoord ;
+
+
+varying vec4 fColor;
+varying vec2 fTexCoord ;
+varying vec4 fColorFromVer ;
+
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+uniform mat4 modelViewMatrix;
+uniform mat4 normalMatrix;
+uniform mat4 projectionMatrix;
+uniform vec4 lightPosition;
+uniform float shininess;
+
+
+void
+main()
+{
+    // Transform vertex normal into eye coordinates
+    vec3 pos = (modelViewMatrix * vPosition).xyz;
+    //vec3 N = normalize( (modelViewMatrix*vec4(vNormal,0.0)).xyz);
+    vec3 N = normalize( (normalMatrix*vec4(vNormal,0.0)).xyz);
+    
+
+    vec3 L = vec3(normalize(lightPosition.xyz-pos)) ;
+    vec3 V = normalize(-pos.xyz) ;
+    vec3 R = reflect(-V, N) ;
+
+
+    // Compute terms in the illumination equation
+    vec4 ambient = ambientProduct;
+
+    float Kd = max( dot(L, N), 0.0 );
+    
+    fColor = ambient ;
+    vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 specular = vec4(0.0, 0.0, 0.0, 1.0);
+   
+    diffuse = Kd*diffuseProduct;
+    float Ks = pow( max(dot(R, V), 0.0), shininess );
+    specular = Ks * specularProduct;
+    
+    if( dot(L, N) < 0.0 ) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+    
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    
+    fTexCoord = vTexCoord ;
+    fColor = fColor + diffuse + specular;
+    fColor.a = 1.0;
+	
+	fColorFromVer = vColor ;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+
+uniform sampler2D texture1;
+uniform sampler2D texture2;
+uniform sampler2D texture3;
+uniform int useTextures ;
+uniform int t1, t2;
+
+varying vec4 fColor;
+varying vec2 fTexCoord ;
+varying vec4 fColorFromVer ;
+
+void
+main()
+{
+
+    vec4 c1,c2,c3 ;
+
+    gl_FragColor = fColor;
+	 if( useTextures == 1)
+    {
+        gl_FragColor = fColor;
+    }
+    if( t1 == 1)
+    {
+        c2 = texture2D( texture2, fTexCoord );
+        gl_FragColor = c2;
+    }
+    gl_FragColor.a = 1.0 ;
+
+}
+</script>
+
+<script type="text/javascript" src="Common/webgl-utils.js"></script>
+<script type="text/javascript" src="Common/initShaders.js"></script>
+
+<script type="text/javascript" src="Common/MV.js"></script>
+<script type="text/javascript" src="objects.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<br/>
+
+<div id="sliderX">
+    X-Roll -180 <input id="sliderXi" type="range"
+    min="-180" max="180" step="2" value="0"
+    />
+    180
+</div><br/>
+
+<div id="sliderY">
+    Y-Roll -180 <input id="sliderYi" type="range"
+    min="-180" max="180" step="2" value="0"
+    />
+    180
+</div><br/>
+
+<div id="sliderZ">
+    Z-Roll -180 <input id="sliderZi" type="range"
+    min="-180" max="180" step="2" value="0"
+    />
+    180
+</div><br/>
+
+<div id="animToggleButton">
+    <input id="animToggleButtoni" type="button" value="Toggle Animation"
+    />
+
+</div><br/>
+
+<div id="textureToggleButton">
+    <input id="textureToggleButtoni" type="button" value="Toggle Textures"
+    />
+    
+</div><br/>
+
+</body>
+</html>
