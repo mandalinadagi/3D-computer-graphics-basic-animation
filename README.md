@@ -6,6 +6,6 @@
 - In this project there exits a snowlady, hellium ballon, clouds and sky as objects of interest. 
 - Sometimes it is better to launch main.html file using firefox rather than google chrome.
 
-![snowlady](https://github.com/mandalinadagi/3D-computer-graphics-basic-animation/blob/master/project_bundle/snowlady_image.png){:height="100px" width="100px"}
-![scene1](https://github.com/mandalinadagi/3D-computer-graphics-basic-animation/blob/master/project_bundle/another_scene.png){:height="100px" width="100px"}
-![scene2](https://github.com/mandalinadagi/3D-computer-graphics-basic-animation/blob/master/project_bundle/another_scene_2.png){:height="100px" width="100px"}
+![snowlady](https://github.com/mandalinadagi/3D-computer-graphics-basic-animation/blob/master/project_bundle/snowlady_image.png| width=48)
+![scene1](https://github.com/mandalinadagi/3D-computer-graphics-basic-animation/blob/master/project_bundle/another_scene.png| width=48)
+![scene2](https://github.com/mandalinadagi/3D-computer-graphics-basic-animation/blob/master/project_bundle/another_scene_2.png| width=48)
